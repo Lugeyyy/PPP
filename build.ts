@@ -1,12 +1,14 @@
 #!/usr/bin/env bun
-import plugin from "bun-plugin-tailwind";
 import { existsSync } from "fs";
 import { rm } from "fs/promises";
+import { cp } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import path from "path";
+import { execSync } from "child_process";
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
   console.log(`
-🏗️  Bun Build Script
+ 🏗️  Bun Build Script
 
 Usage: bun run build.ts [options]
 
@@ -22,14 +24,12 @@ Common Options:
   --env <mode>             Environment handling: inline|disable|prefix*
   --conditions <list>      Package.json export conditions (comma separated)
   --external <list>        External packages (comma separated)
-  --banner <text>          Add banner text to output
-  --footer <text>          Add footer text to output
   --define <obj>           Define global constants (e.g. --define.VERSION=1.0.0)
   --help, -h               Show this help message
 
 Example:
   bun run build.ts --outdir=dist --minify --sourcemap=linked --external=react,react-dom
-`);
+ `);
   process.exit(0);
 }
 
@@ -117,15 +117,44 @@ if (existsSync(outdir)) {
 
 const start = performance.now();
 
-const entrypoints = [...new Bun.Glob("**.html").scanSync("src")]
-  .map(a => path.resolve("src", a))
-  .filter(dir => !dir.includes("node_modules"));
-console.log(`📄 Found ${entrypoints.length} HTML ${entrypoints.length === 1 ? "file" : "files"} to process\n`);
+console.log("🎨 Compiling CSS with Tailwind...");
+execSync("npx @tailwindcss/cli -i src/index.css -o " + path.join(outdir, "style.css"), {
+  stdio: "inherit"
+});
+console.log("✅ CSS compiled\n");
+
+const svgFiles = [...new Bun.Glob("src/**/*.svg").scanSync()];
+console.log(`📄 Copying ${svgFiles.length} SVG file(s)\n`);
+
+for (const svgFile of svgFiles) {
+  const dest = path.join(outdir, path.basename(svgFile));
+  await cp(svgFile, dest);
+}
+
+const entrypoints = [...new Bun.Glob("src/**/*.html").scanSync()]
+  .map(a => path.resolve(a));
+
+console.log(`📄 Copying ${entrypoints.length} HTML file(s)\n`);
+
+for (const htmlFile of entrypoints) {
+  let html = await readFile(htmlFile, "utf-8");
+  
+  html = html.replace(
+    '<script type="module" src="./frontend.tsx" async></script>',
+    '<link rel="stylesheet" href="./style.css" />\n    <script type="module" src="./src/frontend.js" async></script>'
+  );
+  
+  const dest = path.join(outdir, path.basename(htmlFile));
+  await writeFile(dest, html);
+}
+
+const jsEntrypoints = [...new Bun.Glob("src/**/*.{tsx,ts}").scanSync()]
+  .filter(f => !f.includes("node_modules") && !f.includes("index.ts"));
+console.log(`📄 Found ${jsEntrypoints.length} JS/TS file(s) to process\n`);
 
 const result = await Bun.build({
-  entrypoints,
+  entrypoints: jsEntrypoints,
   outdir,
-  plugins: [plugin],
   minify: true,
   target: "browser",
   sourcemap: "linked",
