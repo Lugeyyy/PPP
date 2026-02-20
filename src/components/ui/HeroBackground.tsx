@@ -29,69 +29,37 @@ export function HeroBackground({ className = '' }: HeroBackgroundProps) {
     container.appendChild(renderer.domElement);
 
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 800;
+    const particlesCount = 500;
     const posArray = new Float32Array(particlesCount * 3);
-    const colorsArray = new Float32Array(particlesCount * 3);
-
-    const tealColor = new THREE.Color(0x14B8A6);
-    const amberColor = new THREE.Color(0xF59E0B);
-    const blueColor = new THREE.Color(0x3B82F6);
 
     for (let i = 0; i < particlesCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 100;
-      posArray[i + 1] = (Math.random() - 0.5) * 100;
-      posArray[i + 2] = (Math.random() - 0.5) * 50;
-
-      const colorChoice = Math.random();
-      let color: THREE.Color;
-      if (colorChoice < 0.4) {
-        color = tealColor;
-      } else if (colorChoice < 0.7) {
-        color = amberColor;
-      } else {
-        color = blueColor;
-      }
-
-      colorsArray[i] = color.r;
-      colorsArray[i + 1] = color.g;
-      colorsArray[i + 2] = color.b;
+      posArray[i] = (Math.random() - 0.5) * 80;
+      posArray[i + 1] = (Math.random() - 0.5) * 80;
+      posArray[i + 2] = (Math.random() - 0.5) * 40;
     }
 
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
 
     const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.3,
-      vertexColors: true,
+      size: 0.15,
+      color: 0x888888,
       transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.4,
     });
 
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    const geometry = new THREE.IcosahedronGeometry(15, 2);
+    const geometry = new THREE.IcosahedronGeometry(12, 1);
     const material = new THREE.MeshBasicMaterial({
-      color: 0x14B8A6,
+      color: 0x000000,
       wireframe: true,
       transparent: true,
-      opacity: 0.08,
+      opacity: 0.03,
     });
     const sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(20, -10, -20);
+    sphere.position.set(15, -8, -15);
     scene.add(sphere);
-
-    const geometry2 = new THREE.TorusGeometry(12, 0.5, 16, 100);
-    const material2 = new THREE.MeshBasicMaterial({
-      color: 0xF59E0B,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.06,
-    });
-    const torus = new THREE.Mesh(geometry2, material2);
-    torus.position.set(-25, 15, -30);
-    scene.add(torus);
 
     let mouseX = 0;
     let mouseY = 0;
@@ -106,17 +74,14 @@ export function HeroBackground({ className = '' }: HeroBackgroundProps) {
     const animate = () => {
       animationRef.current = requestAnimationFrame(animate);
 
-      particlesMesh.rotation.x += 0.0003;
-      particlesMesh.rotation.y += 0.0005;
+      particlesMesh.rotation.x += 0.0002;
+      particlesMesh.rotation.y += 0.0003;
 
-      sphere.rotation.x += 0.002;
-      sphere.rotation.y += 0.003;
+      sphere.rotation.x += 0.001;
+      sphere.rotation.y += 0.0015;
 
-      torus.rotation.x -= 0.001;
-      torus.rotation.y += 0.002;
-
-      camera.position.x += (mouseX * 2 - camera.position.x) * 0.02;
-      camera.position.y += (mouseY * 2 - camera.position.y) * 0.02;
+      camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
+      camera.position.y += (mouseY * 1.5 - camera.position.y) * 0.02;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
@@ -149,7 +114,7 @@ export function HeroBackground({ className = '' }: HeroBackgroundProps) {
     <div 
       ref={containerRef} 
       className={`absolute inset-0 -z-10 ${className}`}
-      style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)' }}
+      style={{ background: 'linear-gradient(180deg, var(--background) 0%, var(--background) 100%)' }}
     />
   );
 }
