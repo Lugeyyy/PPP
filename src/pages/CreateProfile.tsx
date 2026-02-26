@@ -321,7 +321,7 @@ export function CreateProfile({ onSave, onCancel }: CreateProfileProps) {
                 <button
                   type="button"
                   onClick={addSkill}
-                  className="btn-primary !px-4"
+                  className="btn-primary px-4!"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -357,7 +357,7 @@ export function CreateProfile({ onSave, onCancel }: CreateProfileProps) {
                 <button
                   type="button"
                   onClick={addTool}
-                  className="btn-primary !px-4"
+                  className="btn-primary px-4!"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -462,7 +462,7 @@ export function CreateProfile({ onSave, onCancel }: CreateProfileProps) {
                   <button
                     type="button"
                     onClick={addAchievement}
-                    className="btn-secondary !px-4"
+                    className="btn-secondary px-4!"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -646,7 +646,7 @@ export function CreateProfile({ onSave, onCancel }: CreateProfileProps) {
           {/* Progress bar */}
           <div className="mt-4 h-1.5 bg-secondary rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-primary to-amber-500 rounded-full transition-all duration-500"
+              className="h-full bg-linear-to-r from-primary to-amber-500 rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
@@ -664,7 +664,7 @@ export function CreateProfile({ onSave, onCancel }: CreateProfileProps) {
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
                 i < currentStep 
-                  ? 'bg-gradient-to-br from-primary to-amber-500 text-white shadow-lg shadow-primary/25' 
+                  ? 'bg-linear-to-br from-primary to-amber-500 text-white shadow-lg shadow-primary/25' 
                   : i === currentStep 
                     ? 'bg-primary/20 text-primary border-2 border-primary'
                     : 'bg-secondary'

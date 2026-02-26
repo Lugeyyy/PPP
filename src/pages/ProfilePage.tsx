@@ -36,7 +36,7 @@ export function ProfilePage({ profile, onNavigate }: ProfilePageProps) {
       {/* Top Section - Hero */}
       <div className="relative bg-card border-b border-border/50 overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 h-48 bg-gradient-to-br from-primary/5 via-transparent to-amber-100/20" />
+        <div className="absolute inset-0 h-48 bg-linear-to-br from-primary/5 via-transparent to-amber-100/20" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
@@ -146,13 +146,13 @@ export function ProfilePage({ profile, onNavigate }: ProfilePageProps) {
                 </h2>
                 <div className="relative">
                   {/* Timeline Line */}
-                  <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-primary to-primary/20" />
+                  <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-linear-to-b from-primary to-primary/20" />
                   
                   <div className="space-y-8">
                     {profile.experience.map((exp, idx) => (
                       <div key={exp.id || idx} className="relative pl-10 group">
                         {/* Timeline Dot */}
-                        <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-gradient-to-br from-primary to-amber-400 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
+                        <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-linear-to-br from-primary to-amber-400 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
                           <Briefcase className="w-3 h-3 text-white" />
                         </div>
                         
@@ -168,7 +168,7 @@ export function ProfilePage({ profile, onNavigate }: ProfilePageProps) {
                             <ul className="mt-4 space-y-2">
                               {exp.keyAchievements.map((achievement, i) => (
                                 <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                                  <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                  <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                                   <span>{achievement}</span>
                                 </li>
                               ))}
@@ -266,7 +266,7 @@ export function ProfilePage({ profile, onNavigate }: ProfilePageProps) {
                   {profile.certifications.map((cert, idx) => (
                     <div key={cert.id || idx} className="p-5 bg-card border border-border/50 rounded-xl hover:border-primary/20 transition-all duration-300">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                           <Award className="w-5 h-5 text-primary" />
                         </div>
                         <div>
